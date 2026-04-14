@@ -1,0 +1,97 @@
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#184b38;
+  --green-2:#2d6a4f;
+  --accent:#f5c04c;
+}
+
+
+  .navbar {
+  background: #2e7d32;
+  padding: 12px 40px;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.logo-img {
+  height: 35px;
+  margin-right: 10px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 18px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.hero{background-size:cover;background-position:center;padding:110px 0;color:#fff;position:relative}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg, rgba(0,0,0,0.45), rgba(0,0,0,0.15))}
+.hero-content{position:relative;z-index:2;text-align:left;max-width:700px;padding-left:20px}
+.hero h1{font-size:56px;line-height:1;margin-bottom:12px;font-weight:800}
+.hero p{font-size:20px;margin-bottom:18px}
+.hero-cta .btn{margin-right:12px}
+
+.hero {
+  background: url("images/hero_background.png") no-repeat center center;
+  background-size: cover;   
+  height: 100vh;            
+  width: 100%;             
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+
+
+.btn{padding:12px 18px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
+.btn-primary{background:var(--accent);color:#123}
+.btn-secondary{background:rgba(255,255,255,0.9);color:#123}
+
+
+.section{padding:60px 0;background:#fff}
+.about p{font-size:18px;color:#333;margin-top:14px;text-align:center}
+.how .steps{display:flex;gap:24px;justify-content:space-between;margin-top:30px}
+.step{flex:1;background:#fff;padding:22px;border-radius:12px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+.step .icon{font-size:34px;margin-bottom:12px}
+
+
+.impact-cards{display:flex;gap:20px;justify-content:center;margin-top:28px}
+.card{background:var(--green);color:#fff;padding:26px;border-radius:12px;width:200px;text-align:center}
+.big{font-size:32px;font-weight:800}
+.label{margin-top:8px;opacity:0.9}
+
+
+
+@media(max-width:800px){
+  .hero h1{font-size:36px}
+  .how .steps{flex-direction:column}
+  .impact-cards{flex-direction:column}
+  .nav{display:none}
+}
+
