@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Arial, sans-serif; background: #f4f4f4; }
+
+    .navbar { background: #2e7d32; padding: 12px 40px; }
+    .nav-container { display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; color: white; font-size: 20px; font-weight: bold; }
+    .logo-img { height: 35px; margin-right: 10px; }
+    .nav-links { display: flex; gap: 18px; }
+    .nav-links a { text-decoration: none; color: white; padding: 8px 14px; border-radius: 6px; transition: 0.3s; }
+    .nav-links a:hover { background: rgba(255,255,255,0.2); }
+    .logout-btn { background: #e53935; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+    .logout-btn:hover { background: #c62828; }
+
+    h2 { text-align: center; color: #2e7d32; margin: 25px 0 15px; }
+    .table-wrapper { overflow-x: auto; padding: 0 20px 40px; }
+
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 3px 10px rgba(0,0,0,0.08); min-width: 1100px; }
+    th, td { border-bottom: 1px solid #e0e0e0; padding: 12px 10px; text-align: center; font-size: 13px; vertical-align: middle; }
+    th { background: #2e7d32; color: white; }
+    tr:hover { background: #f9f9f9; }
+
+    select { padding: 6px 10px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; font-size: 13px; }
+
+    /* OTP CELL */
+    .otp-cell { display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 175px; }
+
+    .btn-generate {
+      padding: 8px 14px; background: #f57c00; color: white;
+      border: none; border-radius: 6px; cursor: pointer;
+      font-size: 12px; font-weight: bold; width: 100%; transition: 0.2s;
+    }
+    .btn-generate:hover { background: #e65100; }
+    .btn-generate:disabled { background: #ffcc80; cursor: not-allowed; }
+
+    .otp-status-box {
+      display: none; background: #fff8e1;
+      border: 1px solid #ffe082; border-radius: 8px;
+      padding: 10px; width: 100%; font-size: 12px; text-align: center;
+    }
+    .otp-sent-msg { margin-bottom: 6px; line-height: 1.5; }
+    .otp-waiting {
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; color: #f57c00; font-weight: bold; font-size: 12px; margin-top: 4px;
+    }
+    .spinner {
+      width: 13px; height: 13px; border: 2px solid #f57c00;
+      border-top-color: transparent; border-radius: 50%;
+      animation: spin 0.8s linear infinite; flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .otp-timer { font-size: 11px; color: #c62828; font-weight: bold; margin-top: 4px; }
+    .btn-resend { background: none; border: none; color: #1565c0; cursor: pointer; font-size: 11px; text-decoration: underline; margin-top: 3px; display: block; }
+
+    .otp-verified-badge {
+      background: #e8f5e9; color: #2e7d32; padding: 8px 10px;
+      border-radius: 8px; font-size: 12px; font-weight: bold;
+      border: 1px solid #a5d6a7; width: 100%; text-align: center;
+    }
+
+    /* PHOTO */
+    .upload-area { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+    .proof-img { width: 55px; height: 55px; object-fit: cover; border-radius: 6px; border: 2px solid #2e7d32; cursor: pointer; }
+    .upload-label { display: inline-block; padding: 5px 10px; background: #1565c0; color: white; border-radius: 6px; cursor: pointer; font-size: 11px; }
+    .upload-label:hover { background: #0d47a1; }
+    .camera-btn { padding: 5px 10px; background: #6a1b9a; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 11px; }
+    .camera-btn:hover { background: #4a148c; }
+    .upload-input { display: none; }
+
+    /* MODALS */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.78); z-index: 1000; justify-content: center; align-items: center; }
+    .modal-overlay.active { display: flex; }
+    #photoModal img { max-width: 90vw; max-height: 85vh; border-radius: 10px; }
+    .modal-close { position: fixed; top: 18px; right: 28px; color: white; font-size: 38px; cursor: pointer; font-weight: bold; }
+    #cameraModal { flex-direction: column; gap: 14px; }
+    #cameraVideo { width: 90vw; max-width: 480px; border-radius: 10px; }
+    #captureBtn { padding: 12px 28px; background: #2e7d32; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+    #closeCameraBtn { padding: 9px 20px; background: #e53935; color: white; border: none; border-radius: 8px; font-size: 13px; cursor: pointer; }
+    canvas { display: none; }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <img src="images/logo.png" class="logo-img">
+        <span>Food Surplus</span>
+      </div>
+      <nav class="nav-links">
+        <a href="home.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="donation.html">Donate Food</a>
+        <a href="my-donation.html">Tracking</a>
+      </nav>
+      <button id="logoutBtn" class="logout-btn">Logout</button>
+    </div>
+  </header>
+
+  <h2>🍽️ Admin – Food Donations</h2>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Donor</th>
+          <th>Food</th>
+          <th>Qty</th>
+          <th>Pickup Address</th>
+          <th>Phone</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>🔐 OTP (Email to Receiver)</th>
+          <th>📷 Proof Photo</th>
+        </tr>
+      </thead>
+      <tbody id="donationTable"></tbody>
+    </table>
+  </div>
+
+  <div class="modal-overlay" id="photoModal">
+    <span class="modal-close" onclick="closePhotoModal()">✕</span>
+    <img id="modalImg" src="" alt="Proof">
+  </div>
+
+  <div class="modal-overlay" id="cameraModal">
+    <video id="cameraVideo" autoplay playsinline></video>
+    <canvas id="captureCanvas"></canvas>
+    <button id="captureBtn">📸 Capture Photo</button>
+    <button id="closeCameraBtn">✕ Cancel</button>
+  </div>
+
+  <script>
+    let activeDonationId = null;
+    let cameraStream = null;
+    const otpTimers = {};
+    const pollIntervals = {};
+
+    function loadDonations() {
+      fetch("http://localhost:5000/api/food/all")
+        .then(res => res.json())
+        .then(data => {
+          let html = "";
+          data.forEach(d => {
+            const date = new Date(d.createdAt).toLocaleDateString();
+
+            // OTP Cell
+            let otpCell = d.otpVerified
+              ? `<div class="otp-verified-badge">
+                   ✅ Verified<br>
+                   <span style="font-weight:normal;font-size:11px">Food can be collected</span>
+                 </div>`
+              : `<div class="otp-cell" id="otpCell_${d._id}">
+                   <button class="btn-generate"
+                     onclick="generateOTP('${d._id}','${encodeURIComponent(d.donorName||'')}','${encodeURIComponent(d.foodType||'')}','${encodeURIComponent(d.quantity||'')}','${encodeURIComponent(d.pickupLocation||'')}')">
+                     📧 Generate & Email OTP
+                   </button>
+                   <div class="otp-status-box" id="otpBox_${d._id}">
+                     <div class="otp-sent-msg" id="otpMsg_${d._id}"></div>
+                     <div class="otp-waiting" id="otpWaiting_${d._id}">
+                       <div class="spinner"></div>
+                       <span>Waiting for donor to verify...</span>
+                     </div>
+                     <div class="otp-timer" id="otpTimer_${d._id}"></div>
+                     <button class="btn-resend"
+                       onclick="generateOTP('${d._id}','${encodeURIComponent(d.donorName||'')}','${encodeURIComponent(d.foodType||'')}','${encodeURIComponent(d.quantity||'')}','${encodeURIComponent(d.pickupLocation||'')}')">
+                       🔄 Resend OTP Email
+                     </button>
+                   </div>
+                 </div>`;
+
+            // Photo Cell
+            let photoCell = d.proofPhoto
+              ? `<div class="upload-area">
+                   <img class="proof-img" src="http://localhost:5000${d.proofPhoto}"
+                        onclick="openPhotoModal('http://localhost:5000${d.proofPhoto}')">
+                   <span style="font-size:10px;color:#999">${d.proofUploadedAt ? new Date(d.proofUploadedAt).toLocaleDateString() : ""}</span>
+                   <label class="upload-label">🔄 Replace<input class="upload-input" type="file" accept="image/*" onchange="uploadProof('${d._id}',this)"></label>
+                 </div>`
+              : `<div class="upload-area">
+                   <span style="color:#bbb;font-size:11px">No photo</span>
+                   <label class="upload-label">📁 Upload<input class="upload-input" type="file" accept="image/*" onchange="uploadProof('${d._id}',this)"></label>
+                   <button class="camera-btn" onclick="openCamera('${d._id}')">📷 Camera</button>
+                 </div>`;
+
+            html += `
+              <tr>
+                <td>${d.donorName}</td>
+                <td>${d.foodType}</td>
+                <td>${d.quantity}</td>
+                <td>${d.pickupLocation}</td>
+                <td>${d.phone || "—"}</td>
+                <td>${date}</td>
+                <td>
+                  <select onchange="updateStatus('${d._id}',this.value)">
+                    <option ${d.status==="Pending"?"selected":""}>Pending</option>
+                    <option ${d.status==="Pickup Scheduled"?"selected":""}>Pickup Scheduled</option>
+                    <option ${d.status==="Food Collected"?"selected":""}>Food Collected</option>
+                    <option ${d.status==="Delivered to NGO"?"selected":""}>Delivered to NGO</option>
+                  </select>
+                </td>
+                <td>${otpCell}</td>
+                <td>${photoCell}</td>
+              </tr>`;
+          });
+          document.getElementById("donationTable").innerHTML = html;
+        }).catch(() => {});
+    }
+
+    // Generate OTP and send email — passes full donation details for the email body
+    async function generateOTP(donationId, donorName, foodType, quantity, pickupLocation) {
+      const btn = document.querySelector(`#otpCell_${donationId} .btn-generate`);
+      if (btn) { btn.disabled = true; btn.textContent = "Sending..."; }
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/otp/generate/${donationId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            donorName: decodeURIComponent(donorName),
+            foodType: decodeURIComponent(foodType),
+            quantity: decodeURIComponent(quantity),
+            pickupLocation: decodeURIComponent(pickupLocation)
+          })
+        });
+        const data = await res.json();
+
+        const box = document.getElementById(`otpBox_${donationId}`);
+        const msgEl = document.getElementById(`otpMsg_${donationId}`);
+        box.style.display = "block";
+
+        if (res.ok) {
+          msgEl.innerHTML = `📧 <b>OTP email sent!</b><br><span style="color:#555">${data.message}</span>`;
+          msgEl.style.color = "#2e7d32";
+        } else {
+          // Dev fallback
+          msgEl.innerHTML = `⚠️ Email failed.<br>
+            <b style="font-size:18px;letter-spacing:6px;color:#e65100">${data.devOtp}</b><br>
+            <span style="font-size:10px;color:#888">Share this OTP with the receiver</span>`;
+          msgEl.style.color = "#c62828";
+        }
+
+        if (btn) { btn.disabled = false; btn.textContent = "📧 Resend OTP Email"; }
+        startTimer(donationId, 600);
+        startPolling(donationId);
+
+      } catch (err) {
+        alert("Error connecting to server.");
+        if (btn) { btn.disabled = false; btn.textContent = "📧 Generate & Email OTP"; }
+      }
+    }
+
+    function startPolling(donationId) {
+      if (pollIntervals[donationId]) clearInterval(pollIntervals[donationId]);
+      pollIntervals[donationId] = setInterval(async () => {
+        try {
+          const res = await fetch("http://localhost:5000/api/food/all");
+          const donations = await res.json();
+          const d = donations.find(x => x._id === donationId);
+          if (d && d.otpVerified) {
+            clearInterval(pollIntervals[donationId]);
+            clearInterval(otpTimers[donationId]);
+            loadDonations();
+          }
+        } catch {}
+      }, 3000);
+    }
+
+    function startTimer(donationId, seconds) {
+      if (otpTimers[donationId]) clearInterval(otpTimers[donationId]);
+      const timerEl = document.getElementById(`otpTimer_${donationId}`);
+      otpTimers[donationId] = setInterval(() => {
+        const m = Math.floor(seconds / 60).toString().padStart(2, "0");
+        const s = (seconds % 60).toString().padStart(2, "0");
+        if (timerEl) timerEl.textContent = `Expires in ${m}:${s}`;
+        seconds--;
+        if (seconds < 0) {
+          clearInterval(otpTimers[donationId]);
+          if (timerEl) timerEl.textContent = "⚠️ OTP expired — resend";
+        }
+      }, 1000);
+    }
+
+    function updateStatus(id, status) {
+      fetch(`http://localhost:5000/api/food/status/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status })
+      });
+    }
+
+    async function uploadProof(id, input) {
+      const file = input.files[0];
+      if (!file) return;
+      const formData = new FormData();
+      formData.append("photo", file);
+      try {
+        const res = await fetch(`http://localhost:5000/api/food/upload-proof/${id}`, { method: "POST", body: formData });
+        const data = await res.json();
+        if (res.ok) { alert("✅ Proof photo uploaded!"); loadDonations(); }
+        else alert(data.message || "Upload failed");
+      } catch { alert("Upload error"); }
+    }
+
+    async function openCamera(donationId) {
+      activeDonationId = donationId;
+      try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } });
+        document.getElementById("cameraVideo").srcObject = cameraStream;
+        document.getElementById("cameraModal").classList.add("active");
+      } catch { alert("Camera access denied"); }
+    }
+
+    document.getElementById("captureBtn").addEventListener("click", () => {
+      const video = document.getElementById("cameraVideo");
+      const canvas = document.getElementById("captureCanvas");
+      canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+      canvas.getContext("2d").drawImage(video, 0, 0);
+      canvas.toBlob(async (blob) => {
+        const formData = new FormData();
+        formData.append("photo", blob, `camera_${Date.now()}.jpg`);
+        const res = await fetch(`http://localhost:5000/api/food/upload-proof/${activeDonationId}`, { method: "POST", body: formData });
+        const data = await res.json();
+        if (res.ok) { alert("✅ Photo uploaded!"); closeCamera(); loadDonations(); }
+        else alert(data.message || "Upload failed");
+      }, "image/jpeg", 0.9);
+    });
+
+    function closeCamera() {
+      if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+      document.getElementById("cameraModal").classList.remove("active");
+      activeDonationId = null;
+    }
+    document.getElementById("closeCameraBtn").addEventListener("click", closeCamera);
+
+    function openPhotoModal(src) {
+      document.getElementById("modalImg").src = src;
+      document.getElementById("photoModal").classList.add("active");
+    }
+    function closePhotoModal() { document.getElementById("photoModal").classList.remove("active"); }
+    document.getElementById("photoModal").addEventListener("click", e => {
+      if (e.target === document.getElementById("photoModal")) closePhotoModal();
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      localStorage.clear();
+      window.location.href = "index.html";
+    });
+
+    loadDonations();
+    setInterval(loadDonations, 8000);
+  </script>
+</body>
+</html>
