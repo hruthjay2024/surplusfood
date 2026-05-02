@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <title>How It Works - Food Surplus</title>
+
+    <style>
+        /* ================== HERO SECTION ================== */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            
+            color: black;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        /* ================== STEPS SECTION ================== */
+        .steps-section {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .steps-section h2 {
+            font-size: 32px;
+            color: #2b9348;
+            margin-bottom: 20px;
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .step-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+            transition: 0.3s;
+        }
+
+        .step-box:hover {
+            transform: translateY(-5px);
+        }
+
+        .step-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #2b9348;
+        }
+
+        .step-box h3 {
+            margin-bottom: 10px;
+            font-size: 22px;
+        }
+
+        .step-box p {
+            font-size: 15px;
+            color: #555;
+        }
+
+        /* ================== RESPONSIVE ================== */
+        @media (max-width: 900px) {
+            .steps-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        .navbar {
+  background: #2e7d32;
+  padding: 12px 40px;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.logo-img {
+  height: 35px;
+  margin-right: 10px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 18px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  background: rgba(255,255,255,0.2);
+}
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="navbar">
+  <div class="nav-container">
+
+    <div class="logo">
+      <img src="images/logo.png" class="logo-img">
+      <span>Food Surplus</span>
+    </div>
+
+    <nav class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="hiw.html">How It Works</a>
+      <a href="get.html">Get Involved</a>
+      <a href="contact.html">Contact</a>
+      <a href="donation.html">Donate Food</a>
+      <a href="my-donation.html">Tracking</a>
+    </nav>
+
+    <!-- <button id="logoutBtn" class="logout-btn">Logout</button> -->
+
+  </div>
+</header>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>How It Works</h1>
+        <p>We connect restaurants, events, and food donors with volunteers and NGOs to rescue surplus food and deliver
+            it to people in need.</p>
+    </section>
+
+    <!-- Steps Section -->
+    <section class="steps-section">
+        <h2>Our 4-Step Process</h2>
+
+        <div class="steps-container">
+
+            <div class="step-box">
+                <div class="step-icon">🍽️</div>
+                <h3>1. Surplus Food Identified</h3>
+                <p>Restaurants, hotels, or events notify us when they have extra food that is still fresh and safe to
+                    eat.</p>
+            </div>
+
+            <div class="step-box">
+                <div class="step-icon">📞</div>
+                <h3>2. Pickup Request Placed</h3>
+                <p>Donors submit a pickup request through our website. Our team immediately alerts nearby volunteers.
+                </p>
+            </div>
+
+            <div class="step-box">
+                <div class="step-icon">🚗</div>
+                <h3>3. Volunteers Collect Food</h3>
+                <p>Verified volunteers collect the surplus food following safety and hygiene standards.</p>
+            </div>
+
+            <div class="step-box">
+                <div class="step-icon">❤️</div>
+                <h3>4. Food Distributed</h3>
+                <p>The collected food is delivered to shelters, orphanages, and needy communities to reduce hunger.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+</body>
+
+</html>

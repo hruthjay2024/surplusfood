@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Receiver Verification | Food Surplus</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #1b5e20, #2e7d32);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* NAVBAR */
+    .navbar { background: rgba(0,0,0,0.2); padding: 12px 40px; }
+    .nav-container { display: flex; align-items: center; justify-content: space-between; }
+    .logo { display: flex; align-items: center; color: white; font-size: 20px; font-weight: bold; }
+    .logo-img { height: 35px; margin-right: 10px; }
+
+    /* MAIN */
+    .page-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 40px 36px;
+      width: 100%;
+      max-width: 460px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    }
+
+    .card-icon { font-size: 48px; text-align: center; margin-bottom: 10px; }
+
+    h2 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 6px;
+      font-size: 24px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    /* STEP INDICATOR */
+    .steps {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+    .step-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #ddd;
+      transition: 0.3s;
+    }
+    .step-dot.active { background: #2e7d32; transform: scale(1.3); }
+    .step-dot.done { background: #81c784; }
+
+    label { display: block; font-weight: bold; margin-bottom: 6px; font-size: 14px; color: #444; }
+
+    input {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 8px;
+      border: 2px solid #e0e0e0;
+      font-size: 16px;
+      transition: 0.2s;
+      margin-bottom: 18px;
+    }
+    input:focus { outline: none; border-color: #2e7d32; }
+
+    /* DONATION PREVIEW */
+    #donationPreview {
+      display: none;
+      background: #f1f8e9;
+      border: 1px solid #aed581;
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+    }
+    #donationPreview h4 { color: #33691e; margin-bottom: 8px; font-size: 14px; }
+    .preview-row { display: flex; justify-content: space-between; font-size: 13px; color: #555; margin: 4px 0; }
+    .preview-row span:last-child { font-weight: bold; color: #2e7d32; }
+
+    /* OTP INPUT - large digits */
+    #otpInput {
+      font-size: 28px;
+      letter-spacing: 10px;
+      text-align: center;
+      font-weight: bold;
+      color: #e65100;
+      padding: 14px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-bottom: 10px;
+    }
+    .btn-green { background: #2e7d32; color: white; }
+    .btn-green:hover { background: #1b5e20; }
+    .btn-green:disabled { background: #a5d6a7; cursor: not-allowed; }
+    .btn-outline { background: white; color: #2e7d32; border: 2px solid #2e7d32; }
+    .btn-outline:hover { background: #f1f8e9; }
+
+    .error-msg { color: #c62828; font-size: 13px; margin: -10px 0 12px; text-align: center; display: none; }
+    .success-msg { color: #2e7d32; font-size: 14px; text-align: center; display: none; }
+
+    /* SUCCESS SCREEN */
+    #successScreen {
+      display: none;
+      text-align: center;
+    }
+    #successScreen .big-check { font-size: 72px; margin-bottom: 16px; }
+    #successScreen h3 { color: #2e7d32; font-size: 22px; margin-bottom: 8px; }
+    #successScreen p { color: #666; font-size: 14px; margin-bottom: 24px; }
+    #successScreen .details {
+      background: #f1f8e9;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    /* Steps label */
+    .step-label { font-size: 12px; color: #888; text-align: center; margin-bottom: 20px; }
+
+    /* Section toggle */
+    .section { display: none; }
+    .section.active { display: block; }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <img src="images/logo.png" class="logo-img">
+        <span>Food Surplus</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-wrap">
+    <div class="card">
+
+      <!-- STEP DOTS -->
+      <div class="steps">
+        <div class="step-dot active" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+        <div class="step-dot" id="dot3"></div>
+      </div>
+
+      <!-- SUCCESS SCREEN -->
+      <div id="successScreen">
+        <div class="big-check">✅</div>
+        <h3>Pickup Authorised!</h3>
+        <p>The receiver has been verified. Food can now be collected.</p>
+        <div class="details" id="successDetails"></div>
+        <button class="btn btn-green" onclick="resetForm()">Verify Another</button>
+      </div>
+
+      <!-- FORM SECTIONS -->
+      <div id="formSections">
+        <div class="card-icon">🍱</div>
+        <h2>Receiver Verification</h2>
+        <p class="subtitle">Enter the Donation ID and OTP provided by the admin to authorise food pickup</p>
+
+        <!-- STEP 1: Donation ID -->
+        <div class="section active" id="step1">
+          <div class="step-label">Step 1 of 2 — Find Donation</div>
+          <label for="donationIdInput">Donation ID</label>
+          <input type="text" id="donationIdInput" placeholder="Paste the Donation ID here" />
+          <div class="error-msg" id="step1Error"></div>
+          <button class="btn btn-green" onclick="lookupDonation()">🔍 Find Donation</button>
+        </div>
+
+        <!-- STEP 2: OTP -->
+        <div class="section" id="step2">
+          <div class="step-label">Step 2 of 2 — Enter OTP</div>
+
+          <div id="donationPreview">
+            <h4>📦 Donation Details</h4>
+            <div class="preview-row"><span>Donor</span><span id="prev_donor">—</span></div>
+            <div class="preview-row"><span>Food</span><span id="prev_food">—</span></div>
+            <div class="preview-row"><span>Quantity</span><span id="prev_qty">—</span></div>
+            <div class="preview-row"><span>Address</span><span id="prev_addr">—</span></div>
+          </div>
+
+          <label for="otpInput">OTP (from Admin)</label>
+          <input type="text" id="otpInput" placeholder="● ● ● ● ● ●" maxlength="6" />
+          <div class="error-msg" id="step2Error"></div>
+
+          <button class="btn btn-green" id="verifyBtn" onclick="verifyOTP()">✅ Verify & Authorise Pickup</button>
+          <button class="btn btn-outline" onclick="goBack()">← Back</button>
+        </div>
+
+      </div><!-- /formSections -->
+    </div>
+  </div>
+
+  <script>
+    let currentDonationId = null;
+    let currentDonation = null;
+
+    function setStep(step) {
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+      document.getElementById(`step${step}`).classList.add("active");
+
+      document.querySelectorAll(".step-dot").forEach((d, i) => {
+        d.classList.remove("active", "done");
+        if (i + 1 < step) d.classList.add("done");
+        if (i + 1 === step) d.classList.add("active");
+      });
+    }
+
+    // ===== STEP 1: Look up donation =====
+    async function lookupDonation() {
+      const id = document.getElementById("donationIdInput").value.trim();
+      const errEl = document.getElementById("step1Error");
+      errEl.style.display = "none";
+
+      if (!id || id.length < 10) {
+        errEl.textContent = "Please enter a valid Donation ID";
+        errEl.style.display = "block";
+        return;
+      }
+
+      try {
+        const res = await fetch("http://localhost:5000/api/food/all");
+        const donations = await res.json();
+        const found = donations.find(d => d._id === id);
+
+        if (!found) {
+          errEl.textContent = "Donation not found. Check the ID and try again.";
+          errEl.style.display = "block";
+          return;
+        }
+
+        if (found.otpVerified) {
+          errEl.textContent = "⚠️ This donation has already been verified and collected.";
+          errEl.style.display = "block";
+          return;
+        }
+
+        currentDonationId = id;
+        currentDonation = found;
+
+        // Fill preview
+        document.getElementById("prev_donor").textContent = found.donorName;
+        document.getElementById("prev_food").textContent = found.foodType;
+        document.getElementById("prev_qty").textContent = found.quantity;
+        document.getElementById("prev_addr").textContent = found.pickupLocation;
+        document.getElementById("donationPreview").style.display = "block";
+
+        setStep(2);
+
+      } catch (err) {
+        errEl.textContent = "Error connecting to server.";
+        errEl.style.display = "block";
+      }
+    }
+
+    // ===== STEP 2: Verify OTP =====
+    async function verifyOTP() {
+      const otp = document.getElementById("otpInput").value.trim();
+      const errEl = document.getElementById("step2Error");
+      errEl.style.display = "none";
+
+      if (!otp || otp.length !== 6) {
+        errEl.textContent = "Please enter the 6-digit OTP";
+        errEl.style.display = "block";
+        return;
+      }
+
+      const btn = document.getElementById("verifyBtn");
+      btn.disabled = true;
+      btn.textContent = "Verifying...";
+
+      try {
+        const res = await fetch(`http://localhost:5000/api/otp/verify/${currentDonationId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ otp })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          errEl.textContent = data.message || "Verification failed";
+          errEl.style.display = "block";
+          btn.disabled = false;
+          btn.textContent = "✅ Verify & Authorise Pickup";
+          return;
+        }
+
+        // Mark as OTP verified in DB
+        await fetch(`http://localhost:5000/api/food/otp-verified/${currentDonationId}`, {
+          method: "PUT"
+        });
+
+        // Show success screen
+        document.getElementById("formSections").style.display = "none";
+        document.getElementById("successScreen").style.display = "block";
+        document.getElementById("successDetails").innerHTML = `
+          <div style="font-size:13px;color:#555;line-height:1.8">
+            <b>Donor:</b> ${currentDonation.donorName}<br>
+            <b>Food:</b> ${currentDonation.foodType}<br>
+            <b>Quantity:</b> ${currentDonation.quantity}<br>
+            <b>Address:</b> ${currentDonation.pickupLocation}
+          </div>`;
+
+        // Update all step dots to done
+        document.querySelectorAll(".step-dot").forEach(d => { d.classList.remove("active"); d.classList.add("done"); });
+        document.getElementById("dot3").classList.add("done");
+
+      } catch (err) {
+        errEl.textContent = "Server error. Try again.";
+        errEl.style.display = "block";
+        btn.disabled = false;
+        btn.textContent = "✅ Verify & Authorise Pickup";
+      }
+    }
+
+    function goBack() {
+      setStep(1);
+      document.getElementById("otpInput").value = "";
+      document.getElementById("step2Error").style.display = "none";
+    }
+
+    function resetForm() {
+      currentDonationId = null;
+      currentDonation = null;
+      document.getElementById("donationIdInput").value = "";
+      document.getElementById("otpInput").value = "";
+      document.getElementById("step1Error").style.display = "none";
+      document.getElementById("step2Error").style.display = "none";
+      document.getElementById("donationPreview").style.display = "none";
+      document.getElementById("formSections").style.display = "block";
+      document.getElementById("successScreen").style.display = "none";
+      setStep(1);
+    }
+
+    // Allow only numbers in OTP field
+    document.getElementById("otpInput").addEventListener("input", function () {
+      this.value = this.value.replace(/\D/g, "");
+    });
+  </script>
+
+</body>
+</html>

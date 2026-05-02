@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donate Food</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- HEADER / NAVBAR -->
+  <header class="navbar">
+  <div class="nav-container">
+
+    <div class="logo">
+      <img src="images/logo.png" class="logo-img">
+      <span>Food Surplus</span>
+    </div>
+
+    <nav class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="hiw.html">How It Works</a>
+      <a href="get.html">Get Involved</a>
+      <a href="contact.html">Contact</a>
+      <a href="donation.html">Donate Food</a>
+      <a href="my-donation.html">Tracking</a>
+    </nav>
+
+    <!-- <button id="logoutBtn" class="logout-btn">Logout</button> -->
+
+  </div>
+</header>
+  <style>
+    /* BODY */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+    }
+
+    /* HEADER */
+    /* ===== NAVBAR ===== */
+
+.navbar {
+  background: #2e7d32;
+  padding: 12px 40px;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.logo-img {
+  height: 35px;
+  margin-right: 10px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 18px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.logout-btn {
+  background: #e53935;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.logout-btn:hover {
+  background: #c62828;
+}
+
+    /* DONATION FORM */
+    .donate-box {
+      width: 90%;
+      max-width: 500px;
+      margin: 50px auto;
+      background: white;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .donate-box h2 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      background: #2e7d32;
+      color: white;
+      font-size: 18px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1b5e20;
+    }
+
+    /* SUCCESS MESSAGE */
+    #successMsg {
+      display: none;
+      color: green;
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .btn-logout {
+      background-color: #e63946;
+      color: white;
+    }
+
+    .btn-logout:hover {
+      background-color: #c62828;
+    }
+  </style>
+
+  <!-- DONATION FORM -->
+  <div class="donate-box">
+    <h2>Donate Food</h2>
+    <form id="donationForm">
+      <label for="donorName">Restaurant / Donor Name</label>
+      <input type="text" id="donorName" placeholder="Enter your name">
+
+      <label for="foodType">Food Type</label>
+      <input type="text" id="foodType" placeholder="Ex: Rice, Chapati, Curry, Sweets">
+
+      <label for="quantity">Quantity (Approx)</label>
+      <input type="text" id="quantity" placeholder="Ex: 20kg, 50 plates">
+
+      <label for="pickupLocation">Pickup Address</label>
+      <textarea id="pickupLocation" rows="4" placeholder="Enter the address"></textarea>
+      
+      <label for="phone">Phone</label>
+      <input type="text" id="phone" placeholder="Enter phone number">
+
+      <button type="submit">Submit Donation</button>
+      <p id="successMsg">Donation submitted successfully!</p>
+    </form>
+  </div>
+
+  <script src="donation.js"></script>
+</body>
+
+</html>
