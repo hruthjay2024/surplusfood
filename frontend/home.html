@@ -81,7 +81,7 @@
     #otpInputField {
       width: 100%;
       padding: 16px;
-      font-size: 30px;
+      font-size: 32px;
       letter-spacing: 12px;
       text-align: center;
       font-weight: bold;
@@ -122,11 +122,8 @@
     .btn-otp-verify:disabled { background: #a5d6a7; cursor: not-allowed; }
 
     .btn-close-popup {
-      background: none;
-      border: none;
-      color: #999;
-      font-size: 13px;
-      cursor: pointer;
+      background: none; border: none;
+      color: #999; font-size: 13px; cursor: pointer;
     }
     .btn-close-popup:hover { color: #555; }
 
@@ -156,7 +153,6 @@
         <a href="donation.html">Donate Food</a>
         <a href="my-donation.html">Tracking</a>
       </nav>
-      <!-- <button id="logoutBtn" class="logout-btn">Logout</button> -->
     </div>
   </header>
 
@@ -174,22 +170,22 @@
     </section>
   </main>
 
-  <!-- FLOATING BUTTON — shown when OTP is waiting for donor -->
+  <!-- FLOATING BUTTON — appears when an OTP is pending -->
   <button id="otpTriggerBtn" onclick="openOtpPopup()">
     🔐 Enter OTP to Confirm Pickup
   </button>
 
-  <!-- OTP POPUP OVERLAY -->
+  <!-- OTP POPUP -->
   <div id="otpOverlay">
     <div class="otp-popup">
 
       <!-- FORM VIEW -->
       <div id="otpFormView">
-        <div class="popup-icon">📱</div>
-        <h3>OTP Verification</h3>
+        <div class="popup-icon">🔐</div>
+        <h3>Enter OTP</h3>
         <p class="popup-desc">
-          A receiver is at your location to collect food.<br>
-          Enter the OTP you received via SMS to confirm.
+          The receiver is at your location.<br>
+          Enter the OTP shown on the admin's screen to confirm the pickup.
         </p>
 
         <select id="otpDonationSelect">
@@ -210,33 +206,29 @@
       <div id="otpSuccessView">
         <div class="big-check">✅</div>
         <h3>Pickup Confirmed!</h3>
-        <p>The receiver is verified.<br>Your food is being collected. Thank you! 🙏</p>
+        <p>Receiver verified successfully.<br>Your food donation is being collected. Thank you! 🙏</p>
         <button class="btn-otp-verify" onclick="closeOtpPopup()">Close</button>
       </div>
 
     </div>
   </div>
 
-  <!-- AUTH CHECK: redirect to login if not logged in -->
+  <!-- AUTH CHECK -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const role = localStorage.getItem("role");
       if (!role) {
         window.location.replace("index.html");
-        return;
       }
     });
   </script>
 
   <script>
-    // ===== OTP POPUP LOGIC =====
-
     async function checkPendingOTPs() {
       try {
         const res = await fetch("http://localhost:5000/api/food/all");
         const donations = await res.json();
 
-        // Only unverified donations
         const unverified = donations.filter(d => !d.otpVerified);
         if (unverified.length === 0) return;
 
@@ -247,7 +239,7 @@
           select.innerHTML += `<option value="${d._id}">${d.donorName} — ${d.foodType} (${d.quantity})</option>`;
         });
 
-        // Check if any has an active pending OTP
+        // Check if any has a live pending OTP
         let anyPending = false;
         for (const d of unverified) {
           try {
@@ -262,12 +254,10 @@
 
         if (anyPending) {
           btn.classList.add("pulse");
-          openOtpPopup(); // auto-open when OTP is waiting
+          openOtpPopup(); // auto-open popup
         }
 
-      } catch (err) {
-        // server not ready yet, ignore silently
-      }
+      } catch {}
     }
 
     function openOtpPopup() {
@@ -285,7 +275,7 @@
       document.getElementById("otpOverlay").classList.remove("active");
     }
 
-    // Only allow digits in OTP field
+    // Only allow digits
     document.getElementById("otpInputField").addEventListener("input", function () {
       this.value = this.value.replace(/\D/g, "");
     });
@@ -304,7 +294,7 @@
         return;
       }
       if (!otp || otp.length !== 6) {
-        errEl.textContent = "Please enter the 6-digit OTP from your SMS.";
+        errEl.textContent = "Please enter the 6-digit OTP shown on the admin screen.";
         errEl.style.display = "block";
         return;
       }
@@ -313,7 +303,6 @@
       btn.textContent = "Verifying...";
 
       try {
-        // Step 1: Verify OTP
         const res = await fetch(`http://localhost:5000/api/otp/verify/${donationId}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -329,12 +318,12 @@
           return;
         }
 
-        // Step 2: Mark donation as OTP verified in DB
+        // Mark as verified in DB
         await fetch(`http://localhost:5000/api/food/otp-verified/${donationId}`, {
           method: "PUT"
         });
 
-        // Show success screen
+        // Show success
         document.getElementById("otpFormView").style.display = "none";
         document.getElementById("otpSuccessView").style.display = "block";
 
@@ -351,12 +340,12 @@
       }
     }
 
-    // Close popup when clicking outside
+    // Close when clicking outside popup
     document.getElementById("otpOverlay").addEventListener("click", function (e) {
       if (e.target === this) closeOtpPopup();
     });
 
-    // Check on load + every 15s in case receiver sends OTP while donor is on page
+    // Check on load + every 15s
     checkPendingOTPs();
     setInterval(checkPendingOTPs, 15000);
   </script>

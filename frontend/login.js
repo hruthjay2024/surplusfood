@@ -23,8 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // ✅ SAVE ROLE IN LOCAL STORAGE
+      // ✅ Save role, email and name to localStorage
       localStorage.setItem("role", data.role);
+      localStorage.setItem("userEmail", data.email);
+      localStorage.setItem("userName", data.name);
 
       if (data.role === "admin") {
         window.location.href = "admin.html";
@@ -33,7 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
-
 
   // ================= ADMIN LOGIN =================
   const adminForm = document.getElementById("adminLoginForm");
@@ -59,6 +60,8 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       localStorage.setItem("role", data.role);
+      localStorage.setItem("userEmail", data.email);
+      localStorage.setItem("userName", data.name);
 
       if (data.role === "admin") {
         window.location.href = "admin.html";

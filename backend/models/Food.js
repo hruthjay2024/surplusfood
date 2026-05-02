@@ -7,19 +7,18 @@ const foodSchema = new mongoose.Schema(
     quantity: String,
     pickupLocation: String,
     phone: String,
+    userEmail: String, // ✅ links donation to logged-in user for filtering
 
     status: {
       type: String,
       default: "Pending"
     },
 
-    // ✅ Set to true once receiver enters correct OTP
     otpVerified: {
       type: Boolean,
       default: false
     },
 
-    // ✅ Proof photo uploaded by admin
     proofPhoto: {
       type: String,
       default: null
