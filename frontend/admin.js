@@ -1,5 +1,5 @@
 function loadDonations() {
-  fetch("http://localhost:5000/api/food/all")
+  fetch("https://surplusfood-nnfx.onrender.com/api/food/all")
     .then(res => res.json())
     .then(data => {
 
@@ -30,7 +30,7 @@ function loadDonations() {
 }
 
 function updateStatus(id,status){
-  fetch(`http://localhost:5000/api/food/status/${id}`,{
+  fetch(`https://surplusfood-nnfx.onrender.com/api/food/status/${id}`,{
     method:"PUT",
     headers:{ "Content-Type":"application/json"},
     body:JSON.stringify({status})

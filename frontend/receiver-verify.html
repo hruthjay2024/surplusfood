@@ -249,7 +249,7 @@
       }
 
       try {
-        const res = await fetch("http://localhost:5000/api/food/all");
+        const res = await fetch("https://surplusfood-nnfx.onrender.com/api/food/all");
         const donations = await res.json();
         const found = donations.find(d => d._id === id);
 
@@ -300,7 +300,7 @@
       btn.textContent = "Verifying...";
 
       try {
-        const res = await fetch(`http://localhost:5000/api/otp/verify/${currentDonationId}`, {
+        const res = await fetch(`https://surplusfood-nnfx.onrender.com/api/otp/verify/${currentDonationId}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ otp })
@@ -317,7 +317,7 @@
         }
 
         // Mark as OTP verified in DB
-        await fetch(`http://localhost:5000/api/food/otp-verified/${currentDonationId}`, {
+        await fetch(`https://surplusfood-nnfx.onrender.com/api/food/otp-verified/${currentDonationId}`, {
           method: "PUT"
         });
 

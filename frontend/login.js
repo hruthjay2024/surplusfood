@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const email = document.getElementById("userEmail").value;
       const password = document.getElementById("userPassword").value;
 
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch("https://surplusfood-nnfx.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -23,10 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      // ✅ Save role, email and name to localStorage
+      // ✅ SAVE ROLE IN LOCAL STORAGE
       localStorage.setItem("role", data.role);
-      localStorage.setItem("userEmail", data.email);
-      localStorage.setItem("userName", data.name);
 
       if (data.role === "admin") {
         window.location.href = "admin.html";
@@ -35,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   }
+
 
   // ================= ADMIN LOGIN =================
   const adminForm = document.getElementById("adminLoginForm");
@@ -46,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const email = document.getElementById("adminEmail").value;
       const password = document.getElementById("adminPassword").value;
 
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch("https://surplusfood-nnfx.onrender.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -60,8 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       localStorage.setItem("role", data.role);
-      localStorage.setItem("userEmail", data.email);
-      localStorage.setItem("userName", data.name);
 
       if (data.role === "admin") {
         window.location.href = "admin.html";
