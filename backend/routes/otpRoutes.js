@@ -3,7 +3,7 @@ const router  = express.Router();
 
 const otpStore = {}; // { donationId: { otp, expiresAt } }
 
-// ===== ADMIN: Generate OTP — stored server side =====
+// ===== ADMIN: Generate OTP =====
 router.post("/generate/:donationId", (req, res) => {
   const { donationId } = req.params;
 
@@ -14,13 +14,10 @@ router.post("/generate/:donationId", (req, res) => {
   };
 
   console.log(`OTP for donation ${donationId}: ${otp}`);
-
-  // Admin panel gets confirmation — OTP is NOT shown on admin side
-  res.json({ message: "OTP generated and sent to donor's tracking page" });
+  res.json({ message: "OTP generated successfully" });
 });
 
-// ===== DONOR TRACKING PAGE: Get OTP to display to donor =====
-// Called by my-donation.html to show OTP to donor
+// ===== DONOR TRACKING PAGE: Get OTP to display =====
 router.get("/get/:donationId", (req, res) => {
   const { donationId } = req.params;
   const record = otpStore[donationId];
@@ -34,12 +31,11 @@ router.get("/get/:donationId", (req, res) => {
     return res.json({ otp: null, pending: false, expired: true });
   }
 
-  // Return OTP + remaining seconds so donor can see countdown
   const remainingSeconds = Math.floor((record.expiresAt - Date.now()) / 1000);
   res.json({ otp: record.otp, pending: true, remainingSeconds });
 });
 
-// ===== CHECK if OTP is pending (used for polling) =====
+// ===== CHECK if OTP is pending =====
 router.get("/pending/:donationId", (req, res) => {
   const { donationId } = req.params;
   const record = otpStore[donationId];
@@ -51,7 +47,7 @@ router.get("/pending/:donationId", (req, res) => {
   }
 });
 
-// ===== RECEIVER: Verify OTP via admin panel =====
+// ===== RECEIVER via admin: Verify OTP =====
 router.post("/verify/:donationId", (req, res) => {
   const { donationId } = req.params;
   const { otp } = req.body;
