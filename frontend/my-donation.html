@@ -6,109 +6,196 @@
 <title>My Donations</title>
 
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Arial, sans-serif; background: #f5f5f5; }
+        .site-header {
+            background: #2e7d32;
+            padding: 15px 0;
+            color: white;
+        }
 
-.navbar { background: #2e7d32; padding: 12px 40px; }
-.nav-container { display: flex; align-items: center; justify-content: space-between; }
-.logo { display: flex; align-items: center; color: white; font-size: 20px; font-weight: bold; }
-.logo-img { height: 35px; margin-right: 10px; }
-.nav-links { display: flex; gap: 18px; }
-.nav-links a { text-decoration: none; color: white; padding: 8px 14px; border-radius: 6px; transition: 0.3s; }
-.nav-links a:hover { background: rgba(255,255,255,0.2); }
-.logout-btn { background: #e53935; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; }
-.logout-btn:hover { background: #c62828; }
+        .header-inner {
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.container { width: 80%; margin: 40px auto; }
-h1 { color: #2e7d32; margin-bottom: 4px; }
-.subtitle { color: #888; font-size: 13px; margin-bottom: 24px; }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: bold;
+        }
 
-.card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 20px; }
-.card-top { display: flex; justify-content: space-between; align-items: flex-start; }
-.badge { padding: 5px 12px; border-radius: 20px; font-size: 14px; font-weight: bold; white-space: nowrap; }
-.badge-pending  { background: #ffe0b2; color: #ef6c00; }
-.badge-verified { background: #e8f5e9; color: #2e7d32; }
-.badge-other    { background: #e3f2fd; color: #1565c0; }
-.location { margin: 5px 0; color: #555; font-size: 14px; }
-.date { font-size: 13px; color: gray; margin-top: 3px; }
+        .logo-img {
+            width: 45px;
+        }
 
-.progress { display: flex; justify-content: space-between; margin-top: 25px; text-align: center; }
-.step { flex: 1; }
-.circle { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #ccc; margin: 0 auto 8px; background: white; }
-.completed { background: #2e7d32; border-color: #2e7d32; }
-.label { font-size: 12px; color: #555; }
+        .nav a {
+            margin: 0 12px;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+        }
 
-.empty-state { text-align: center; padding: 60px 20px; color: #aaa; }
-.empty-state .icon { font-size: 60px; margin-bottom: 14px; }
-.empty-state p { font-size: 16px; margin-bottom: 10px; }
-.empty-state a { color: #2e7d32; font-weight: bold; text-decoration: none; }
+        .nav a:hover {
+            text-decoration: underline;
+        }
 
-/* ===== OTP POPUP ===== */
-#otpPopupOverlay {
-  display: none; position: fixed; inset: 0;
-  background: rgba(0,0,0,0.7); z-index: 9999;
-  justify-content: center; align-items: center;
-  backdrop-filter: blur(4px);
-}
-#otpPopupOverlay.active { display: flex; }
-
-.otp-popup-box {
-  background: white; border-radius: 24px; padding: 44px 40px;
-  width: 90%; max-width: 420px; text-align: center;
-  box-shadow: 0 30px 70px rgba(0,0,0,0.35);
-  animation: popIn 0.35s ease;
-}
-@keyframes popIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to   { transform: scale(1); opacity: 1; }
+        .btn-cta {
+            background: white;
+            color: #2e7d32 !important;
+            padding: 8px 15px;
+            border-radius: 6px;
+        }
+  
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  margin: 0;
 }
 
-.otp-popup-box .popup-icon { font-size: 56px; margin-bottom: 12px; }
-.otp-popup-box h3 { color: #2e7d32; font-size: 24px; margin-bottom: 8px; }
-.otp-popup-box .popup-sub { color: #666; font-size: 14px; margin-bottom: 24px; line-height: 1.6; }
-
-.otp-popup-box .donation-info {
-  background: #f1f8e9; border-radius: 10px;
-  padding: 12px 16px; margin-bottom: 20px;
-  text-align: left; font-size: 13px; color: #444; line-height: 1.8;
-}
-.otp-popup-box .donation-info b { color: #2e7d32; }
-
-.otp-code-display {
-  background: #fff3e0; border: 3px dashed #f57c00;
-  border-radius: 16px; padding: 20px; margin-bottom: 16px;
-}
-.otp-code-display .otp-label { font-size: 13px; color: #888; margin-bottom: 8px; }
-.otp-code-display .otp-digits {
-  font-size: 52px; font-weight: 900;
-  letter-spacing: 14px; color: #e65100; line-height: 1;
-}
-.otp-code-display .otp-countdown {
-  font-size: 12px; color: #c62828; font-weight: bold; margin-top: 10px;
+.header {
+  background: #2e7d32;
+  color: white;
+  padding: 15px 40px;
+  font-size: 20px;
+  font-weight: bold;
 }
 
-.otp-instruction {
-  background: #e8f5e9; border-radius: 10px; padding: 12px;
-  font-size: 13px; color: #2e7d32; margin-bottom: 20px; line-height: 1.5;
+.container {
+  width: 80%;
+  margin: 40px auto;
 }
 
-.btn-otp-close {
-  width: 100%; padding: 13px; background: #f5f5f5;
-  color: #555; border: none; border-radius: 10px;
-  font-size: 15px; cursor: pointer; transition: 0.2s;
+h1 {
+  color: #2e7d32;
 }
-.btn-otp-close:hover { background: #e0e0e0; }
 
-#otpSuccessInPopup { display: none; }
-#otpSuccessInPopup .big-check { font-size: 72px; margin-bottom: 12px; }
-#otpSuccessInPopup h3 { color: #2e7d32; font-size: 22px; margin-bottom: 8px; }
-#otpSuccessInPopup p  { color: #666; font-size: 14px; margin-bottom: 20px; }
-.btn-otp-done {
-  width: 100%; padding: 13px; background: #2e7d32;
-  color: white; border: none; border-radius: 10px;
-  font-size: 15px; cursor: pointer;
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  margin-top: 20px;
 }
-.btn-otp-done:hover { background: #1b5e20; }
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge {
+  background: #ffe0b2;
+  color: #ef6c00;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.location {
+  margin: 5px 0;
+  color: #555;
+}
+
+.date {
+  font-size: 14px;
+  color: gray;
+}
+
+.progress {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 25px;
+  text-align: center;
+}
+
+.step {
+  flex: 1;
+}
+
+.circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  margin: 0 auto 8px;
+}
+
+.active {
+  background: #2e7d32;
+  border-color: #2e7d32;
+}
+
+.completed {
+  background: #2e7d32;
+  border-color: #2e7d32;
+}
+
+.label {
+  font-size: 13px;
+  color: #444;
+}
+/* ===== NAVBAR ===== */
+
+.navbar {
+  background: #2e7d32;
+  padding: 12px 40px;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.logo-img {
+  height: 35px;
+  margin-right: 10px;
+}
+
+.nav-links {
+  display: flex;
+  gap: 18px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+.nav-links a:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.logout-btn {
+  background: #e53935;
+  color: white;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.logout-btn:hover {
+  background: #c62828;
+}
 </style>
 </head>
 
@@ -116,10 +203,12 @@ h1 { color: #2e7d32; margin-bottom: 4px; }
 
 <header class="navbar">
   <div class="nav-container">
+
     <div class="logo">
       <img src="images/logo.png" class="logo-img">
       <span>Food Surplus</span>
     </div>
+
     <nav class="nav-links">
       <a href="home.html">Home</a>
       <a href="about.html">About</a>
@@ -129,233 +218,89 @@ h1 { color: #2e7d32; margin-bottom: 4px; }
       <a href="donation.html">Donate Food</a>
       <a href="my-donation.html">Tracking</a>
     </nav>
+
     <button id="logoutBtn" class="logout-btn">Logout</button>
+
   </div>
 </header>
 
-<!-- OTP POPUP -->
-<div id="otpPopupOverlay">
-  <div class="otp-popup-box">
-
-    <div id="otpDisplayView">
-      <div class="popup-icon">🔐</div>
-      <h3>Pickup OTP</h3>
-      <p class="popup-sub">
-        A receiver is at your location to collect food.<br>
-        Show them this OTP to confirm the pickup.
-      </p>
-      <div class="donation-info" id="otpDonationInfo"></div>
-      <div class="otp-code-display">
-        <div class="otp-label">Your One-Time Password</div>
-        <div class="otp-digits" id="otpDigits">——</div>
-        <div class="otp-countdown" id="otpCountdown"></div>
-      </div>
-      <div class="otp-instruction">
-        📋 Show this code to the receiver.<br>
-        They will enter it on the admin panel to verify and collect the food.
-      </div>
-      <button class="btn-otp-close" onclick="closeOtpPopup()">Minimise</button>
-    </div>
-
-    <div id="otpSuccessInPopup">
-      <div class="big-check">✅</div>
-      <h3>Pickup Confirmed!</h3>
-      <p>The receiver has verified the OTP.<br>Your food donation is being collected. Thank you! 🙏</p>
-      <button class="btn-otp-done" onclick="closeOtpPopup()">Done</button>
-    </div>
-
-  </div>
-</div>
-
 <div class="container">
   <h1>My Donations</h1>
-  <p class="subtitle" id="userLabel"></p>
   <div id="donationsContainer"></div>
 </div>
 
 <script>
-const API = "https://surplusfood-nnfx.onrender.com";
-
 document.addEventListener("DOMContentLoaded", async () => {
 
-  const role      = localStorage.getItem("role");
-  const userEmail = localStorage.getItem("userEmail") || "";
-  const userName  = localStorage.getItem("userName")  || "";
+  // 🔐 AUTH CHECK
+  if (!localStorage.getItem("role")) {
+    window.location.href = "login.html";
+  }
 
-  if (!role) { window.location.href = "index.html"; return; }
-
+  // 🚪 LOGOUT
   document.getElementById("logoutBtn").addEventListener("click", () => {
     localStorage.clear();
     window.location.href = "index.html";
   });
 
-  document.getElementById("userLabel").textContent =
-    userName ? `Logged in as: ${userName}` : "";
+  // 📦 FETCH DONATIONS
+  try {
+    const res = await fetch("https://surplusfood-nnfx.onrender.com/api/food/all");
+    const donations = await res.json();
 
-  const statusMap = {
-    "Pending": 1, "Pickup Scheduled": 2,
-    "Food Collected": 3, "Delivered to NGO": 4
-  };
+    const container = document.getElementById("donationsContainer");
 
-  // ── Load donations ──────────────────────────────
-  async function loadDonations() {
-    try {
-      const res  = await fetch(`${API}/api/food/all`);
-      const all  = await res.json();
+    donations.forEach(d => {
 
-      const myDonations = (role === "admin")
-        ? all
-        : all.filter(d => d.userEmail === userEmail);
+      const statusMap = {
+        "Pending": 1,
+        "Pickup Scheduled": 2,
+        "Food Collected": 3,
+        "Delivered": 4
+      };
 
-      const container = document.getElementById("donationsContainer");
+      const currentStep = statusMap[d.status] || 1;
 
-      if (myDonations.length === 0) {
-        container.innerHTML = `
-          <div class="empty-state">
-            <div class="icon">🍱</div>
-            <p>You haven't made any donations yet.</p>
-            <a href="donation.html">Donate food now →</a>
-          </div>`;
-        return;
-      }
-
-      container.innerHTML = "";
-      myDonations.forEach(d => {
-        const currentStep = statusMap[d.status] || 1;
-
-        let badgeClass = "badge badge-pending";
-        let badgeText  = d.status || "Pending";
-        if (d.otpVerified || d.status === "Food Collected" || d.status === "Delivered to NGO") {
-          badgeClass = "badge badge-verified";
-          badgeText  = d.otpVerified ? "✅ Collected" : d.status;
-        } else if (d.status === "Pickup Scheduled") {
-          badgeClass = "badge badge-other";
-        }
-
-        container.innerHTML += `
-          <div class="card">
-            <div class="card-top">
-              <div>
-                <h3>${d.donorName}</h3>
-                <p style="color:#666;font-size:14px;margin-top:3px">${d.foodType} — ${d.quantity}</p>
-                <div class="location">📍 ${d.pickupLocation}</div>
-                <div class="date">📅 ${new Date(d.createdAt).toLocaleDateString()}</div>
-              </div>
-              <div class="${badgeClass}">${badgeText}</div>
+      container.innerHTML += `
+        <div class="card">
+          <div class="card-top">
+            <div>
+              <h3>${d.donorName}</h3>
+              <p>${d.foodType} — ${d.quantity}</p>
+              <div class="location">📍 ${d.pickupLocation}</div>
+              <div class="date">${new Date(d.createdAt).toLocaleDateString()}</div>
             </div>
-            <div class="progress">
-              <div class="step">
-                <div class="circle ${currentStep >= 1 ? 'completed' : ''}"></div>
-                <div class="label">Submitted</div>
-              </div>
-              <div class="step">
-                <div class="circle ${currentStep >= 2 ? 'completed' : ''}"></div>
-                <div class="label">Pickup Scheduled</div>
-              </div>
-              <div class="step">
-                <div class="circle ${currentStep >= 3 ? 'completed' : ''}"></div>
-                <div class="label">Food Collected</div>
-              </div>
-              <div class="step">
-                <div class="circle ${currentStep >= 4 ? 'completed' : ''}"></div>
-                <div class="label">Delivered to NGO</div>
-              </div>
+            <div class="badge">${d.status || "Pending"}</div>
+          </div>
+
+          <div class="progress">
+            <div class="step">
+              <div class="circle ${currentStep >= 1 ? 'completed' : ''}"></div>
+              <div class="label">Donation Submitted</div>
             </div>
-          </div>`;
-      });
 
-    } catch {
-      document.getElementById("donationsContainer").innerHTML =
-        `<p style="color:red;text-align:center;margin-top:40px">
-           ⚠️ Error loading donations. Is the server running?
-         </p>`;
-    }
+            <div class="step">
+              <div class="circle ${currentStep >= 2 ? 'completed' : ''}"></div>
+              <div class="label">Pickup Scheduled</div>
+            </div>
+
+            <div class="step">
+              <div class="circle ${currentStep >= 3 ? 'completed' : ''}"></div>
+              <div class="label">Food Collected</div>
+            </div>
+
+            <div class="step">
+              <div class="circle ${currentStep >= 4 ? 'completed' : ''}"></div>
+              <div class="label">Delivered to NGO</div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+  } catch (err) {
+    alert("Error loading donations");
   }
-
-  await loadDonations();
-
-  // ── Poll every 5s for pending OTP ──────────────
-  let otpCountdownInterval = null;
-  let currentOtpDonationId = null;
-
-  async function checkForOTP() {
-    try {
-      const res  = await fetch(`${API}/api/food/all`);
-      const all  = await res.json();
-
-      // Only non-admin, unverified donations belonging to this user
-      const myDonations = (role === "admin")
-        ? []
-        : all.filter(d => !d.otpVerified && d.userEmail === userEmail);
-
-      for (const d of myDonations) {
-        const r  = await fetch(`${API}/api/otp/get/${d._id}`);
-        const rd = await r.json();
-
-        if (rd.pending && rd.otp) {
-          if (currentOtpDonationId !== d._id) {
-            currentOtpDonationId = d._id;
-            showOtpPopup(d, rd.otp, rd.remainingSeconds);
-          }
-          break;
-        }
-
-        // Check if receiver just verified
-        if (d._id === currentOtpDonationId && !rd.pending) {
-          const latest = all.find(x => x._id === d._id);
-          if (latest && latest.otpVerified) {
-            showOtpSuccess();
-            currentOtpDonationId = null;
-            await loadDonations();
-          }
-        }
-      }
-
-    } catch {}
-  }
-
-  function showOtpPopup(donation, otp, remainingSeconds) {
-    document.getElementById("otpDonationInfo").innerHTML = `
-      <b>Donor:</b> ${donation.donorName}<br>
-      <b>Food:</b> ${donation.foodType} — ${donation.quantity}<br>
-      <b>Address:</b> ${donation.pickupLocation}`;
-
-    document.getElementById("otpDigits").textContent = otp;
-    document.getElementById("otpDisplayView").style.display   = "block";
-    document.getElementById("otpSuccessInPopup").style.display = "none";
-    document.getElementById("otpPopupOverlay").classList.add("active");
-
-    if (otpCountdownInterval) clearInterval(otpCountdownInterval);
-    let seconds = remainingSeconds;
-    const countdownEl = document.getElementById("otpCountdown");
-
-    otpCountdownInterval = setInterval(() => {
-      const m = Math.floor(seconds / 60).toString().padStart(2, "0");
-      const s = (seconds % 60).toString().padStart(2, "0");
-      countdownEl.textContent = `Expires in ${m}:${s}`;
-      seconds--;
-      if (seconds < 0) {
-        clearInterval(otpCountdownInterval);
-        countdownEl.textContent = "⚠️ OTP expired";
-        document.getElementById("otpDigits").textContent = "——";
-        currentOtpDonationId = null;
-      }
-    }, 1000);
-  }
-
-  function showOtpSuccess() {
-    clearInterval(otpCountdownInterval);
-    document.getElementById("otpDisplayView").style.display    = "none";
-    document.getElementById("otpSuccessInPopup").style.display = "block";
-  }
-
-  window.closeOtpPopup = function () {
-    document.getElementById("otpPopupOverlay").classList.remove("active");
-  };
-
-  checkForOTP();
-  setInterval(checkForOTP, 5000);
-  setInterval(loadDonations, 10000);
 
 });
 </script>
