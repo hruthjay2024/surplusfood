@@ -43,6 +43,17 @@ h1 { color: #2e7d32; margin-bottom: 4px; }
 .empty-state p { font-size: 16px; margin-bottom: 10px; }
 .empty-state a { color: #2e7d32; font-weight: bold; text-decoration: none; }
 
+/* PROOF PHOTO */
+.proof-section { margin-top: 20px; padding-top: 16px; border-top: 1px solid #e0e0e0; text-align: center; }
+.proof-label { font-size: 13px; font-weight: bold; color: #555; margin-bottom: 10px; }
+.proof-photo { width: 100%; max-width: 340px; height: 200px; object-fit: cover; border-radius: 10px; border: 2px solid #2e7d32; cursor: pointer; transition: 0.2s; }
+.proof-photo:hover { opacity: 0.85; }
+.proof-date { font-size: 11px; color: #aaa; margin-top: 6px; }
+#proofModal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 9998; justify-content: center; align-items: center; }
+#proofModal.active { display: flex; }
+#proofModal img { max-width: 92vw; max-height: 88vh; border-radius: 10px; }
+#proofModalClose { position: fixed; top: 18px; right: 28px; color: white; font-size: 38px; cursor: pointer; font-weight: bold; }
+
 /* ===== OTP POPUP ===== */
 #otpPopupOverlay {
   display: none; position: fixed; inset: 0;
@@ -134,6 +145,12 @@ h1 { color: #2e7d32; margin-bottom: 4px; }
 </header>
 
 <!-- OTP POPUP -->
+<!-- PROOF PHOTO MODAL -->
+<div id="proofModal">
+  <span id="proofModalClose" onclick="closeProofModal()">✕</span>
+  <img id="proofModalImg" src="" alt="Proof">
+</div>
+
 <div id="otpPopupOverlay">
   <div class="otp-popup-box">
 
@@ -232,6 +249,17 @@ document.addEventListener("DOMContentLoaded", async () => {
           badgeClass = "badge badge-other";
         }
 
+        // Proof photo section
+        const proofSection = d.proofPhoto
+          ? `<div class="proof-section">
+               <div class="proof-label">📷 Proof of Collection</div>
+               <img class="proof-photo" src="https://surplusfood-nnfx.onrender.com${d.proofPhoto}"
+                    onclick="openProofModal('https://surplusfood-nnfx.onrender.com${d.proofPhoto}')"
+                    alt="Proof photo">
+               <div class="proof-date">${d.proofUploadedAt ? 'Uploaded: ' + new Date(d.proofUploadedAt).toLocaleDateString() : ''}</div>
+             </div>`
+          : "";
+
         container.innerHTML += `
           <div class="card">
             <div class="card-top">
@@ -261,6 +289,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <div class="label">Delivered to NGO</div>
               </div>
             </div>
+            ${proofSection}
           </div>`;
       });
 
@@ -348,6 +377,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("otpDisplayView").style.display    = "none";
     document.getElementById("otpSuccessInPopup").style.display = "block";
   }
+
+  window.openProofModal = function(src) {
+    document.getElementById("proofModalImg").src = src;
+    document.getElementById("proofModal").classList.add("active");
+  };
+
+  window.closeProofModal = function() {
+    document.getElementById("proofModal").classList.remove("active");
+  };
+
+  document.getElementById("proofModal").addEventListener("click", function(e) {
+    if (e.target === this) closeProofModal();
+  });
 
   window.closeOtpPopup = function () {
     document.getElementById("otpPopupOverlay").classList.remove("active");
