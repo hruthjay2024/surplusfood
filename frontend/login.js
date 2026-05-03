@@ -7,33 +7,36 @@ document.addEventListener("DOMContentLoaded", () => {
     userForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const email = document.getElementById("userEmail").value;
+      const email    = document.getElementById("userEmail").value;
       const password = document.getElementById("userPassword").value;
 
-      const res = await fetch("https://surplusfood-nnfx.onrender.com/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
+      try {
+        const res  = await fetch("https://surplusfood-nnfx.onrender.com/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (!res.ok) {
-        alert(data.message);
-        return;
-      }
+        if (!res.ok) { alert(data.message); return; }
 
-      // ✅ SAVE ROLE IN LOCAL STORAGE
-      localStorage.setItem("role", data.role);
+        // ✅ Save role, email and name
+        localStorage.setItem("role",      data.role);
+        localStorage.setItem("userEmail", data.email);
+        localStorage.setItem("userName",  data.name);
 
-      if (data.role === "admin") {
-        window.location.href = "admin.html";
-      } else {
-        window.location.href = "home.html";
+        if (data.role === "admin") {
+          window.location.href = "admin.html";
+        } else {
+          window.location.href = "home.html";
+        }
+
+      } catch (err) {
+        alert("Error connecting to server. Please try again.");
       }
     });
   }
-
 
   // ================= ADMIN LOGIN =================
   const adminForm = document.getElementById("adminLoginForm");
@@ -42,28 +45,32 @@ document.addEventListener("DOMContentLoaded", () => {
     adminForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const email = document.getElementById("adminEmail").value;
+      const email    = document.getElementById("adminEmail").value;
       const password = document.getElementById("adminPassword").value;
 
-      const res = await fetch("https://surplusfood-nnfx.onrender.com/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
+      try {
+        const res  = await fetch("https://surplusfood-nnfx.onrender.com/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
 
-      const data = await res.json();
+        const data = await res.json();
 
-      if (!res.ok) {
-        alert(data.message);
-        return;
-      }
+        if (!res.ok) { alert(data.message); return; }
 
-      localStorage.setItem("role", data.role);
+        localStorage.setItem("role",      data.role);
+        localStorage.setItem("userEmail", data.email);
+        localStorage.setItem("userName",  data.name);
 
-      if (data.role === "admin") {
-        window.location.href = "admin.html";
-      } else {
-        alert("Not an admin account");
+        if (data.role === "admin") {
+          window.location.href = "admin.html";
+        } else {
+          alert("Not an admin account");
+        }
+
+      } catch (err) {
+        alert("Error connecting to server. Please try again.");
       }
     });
   }
